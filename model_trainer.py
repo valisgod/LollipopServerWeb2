@@ -5,6 +5,7 @@ from AlgContract.algcontract.rank_contract import RankAlgorithmContractExample
 from AlgContract.algcontract.recall_contract import write_success
 import schedule
 import time
+import sys
 import datetime
 import os
 from db import LollipopDB
@@ -12,6 +13,8 @@ import config
 
 
 def write_strlist_to_file(str_list, file_path):
+    if len(str_list) == 0:
+        return
     with open(file_path, "w") as fw:
         for s in str_list:
             fw.write(s + "\n")
@@ -45,10 +48,12 @@ def train_model():
 if __name__ == "__main__":
     schedule.every().day.at("00:05").do(train_model)         # 每天在 00:05 时间点运行
     while True:
-        # ----  立即执行（供测试用） ----
-        # schedule.run_all()  # 立即执行（供测试用）
-        # break
-        # ----  立即执行（供测试用） ----
-
-        schedule.run_pending()   # 运行所有可以运行的任务
-        time.sleep(1)
+        if len(sys.argv) > 1 and sys.argv[1] == 'test':
+            # ----  立即执行（供测试用） ----
+            schedule.run_all()  # 立即执行（供测试用）
+            break
+            # ----  立即执行（供测试用） ----
+        else:
+            print("waiting for daily training...")
+            schedule.run_pending()   # 运行所有可以运行的任务
+            time.sleep(1)

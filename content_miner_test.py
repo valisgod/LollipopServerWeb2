@@ -23,7 +23,7 @@ def main():
 
             assert response["jsonrpc"]
             assert response["id"] == 0
-            break
+            # break
 
 
 if __name__ == "__main__":
