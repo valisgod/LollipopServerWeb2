@@ -1,0 +1,4 @@
+[submodule "AlgContract"]
+	path = AlgContract
+	url = https://github.com/LollipopRec/AlgContract.git
+	branch = web2server
