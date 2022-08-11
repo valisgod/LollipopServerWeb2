@@ -9,10 +9,14 @@ from jsonrpc import JSONRPCResponseManager, dispatcher
 from AlgContract.algcontract.recall_contract import RecallAlgorithmContractExample
 from AlgContract.algcontract.rank_contract import RankAlgorithmContractExample
 from AlgContract.algcontract.user_contract import UserContractExample
+from AlgContract.algcontract.cu_contract import ContentUnderstandingAlgorithmContractExample
 from db import LollipopDB
 
 
 # 启动时加载训练完成的最新版本模型
+cu_contract = ContentUnderstandingAlgorithmContractExample()
+print("cu model path: {}".format(cu_contract.model_ar_dir))
+loldb = LollipopDB()
 recall_contract = RecallAlgorithmContractExample()
 print("recall model path: {}".format(recall_contract.last_model_local_dir))
 print("recall index path: {}".format(recall_contract.index_local_dir))
@@ -54,6 +58,20 @@ def report_user_behavior(**kwargs):
     user_fearures = user_contract.update_user_interest(merged_log)
     # 记录用户特征到db
     loldb.write_user_features(uid, json.dumps(user_fearures))
+    return "OK"
+
+
+@dispatcher.add_method(name="AddContent")
+def ask_recommend(**kwargs):
+    raw_content = kwargs["raw_content"]
+    # id统一用string类型
+    item_id = str(raw_content['id'])
+    # 存储原始item内容
+    loldb.write_item_raw_content(item_id, json.dumps(raw_content))
+    # 执行内容理解合约
+    forward_info = cu_contract.parse([raw_content])[0]
+    # 存储item正排信息
+    loldb.write_item_forward(item_id, json.dumps(forward_info))
     return "OK"
 
 

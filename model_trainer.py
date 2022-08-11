@@ -45,7 +45,7 @@ def train_model():
     rank_contract.train()
 
 
-if __name__ == "__main__":
+def main():
     schedule.every().day.at("00:05").do(train_model)         # 每天在 00:05 时间点运行
     while True:
         if len(sys.argv) > 1 and sys.argv[1] == 'test':
@@ -57,3 +57,7 @@ if __name__ == "__main__":
             print("waiting for daily training...")
             schedule.run_pending()   # 运行所有可以运行的任务
             time.sleep(1)
+
+
+if __name__ == "__main__":
+    main()

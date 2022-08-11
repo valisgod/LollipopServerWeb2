@@ -13,15 +13,7 @@ python model_trainer.py test
 ```shell
 python model_trainer.py
 ```
-### start content_miner service
-```shell
-python content_miner.py
-```
-### test content_miner service
-```shell
-python content_miner_test.py
-```
-### start recommender service
+### start recommender&content_miner service
 ```shell
 python recommender.py
 ```
@@ -29,4 +21,7 @@ python recommender.py
 ```shell
 python recommend_test.py
 ```
-
+### test content_miner service
+```shell
+python content_miner_test.py
+```

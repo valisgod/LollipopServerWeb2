@@ -18,11 +18,11 @@ run:
     command:
       - python recommender.py
     image: server
-  model_trainer:
-    command:
-      - python model_trainer.py
-    image: server
-  content_miner:
-    command:
-      - python content_miner.py
-    image: server
+#  model_trainer:
+#    command:
+#      - python model_trainer.py
+#    image: server
+#  content_miner:
+#    command:
+#      - python content_miner.py
+#    image: server
