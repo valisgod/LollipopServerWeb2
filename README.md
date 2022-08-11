@@ -3,7 +3,7 @@
 please use run_mysql.sh and db_schema.sql to init a DB instance, remember to modify db connect string in config.py.
 ### init train cu model
 ```shell
-cd AlgContract/algcontract/ & python cu_contract.py
+cd AlgContract/algcontract/ && python cu_contract.py
 ```
 ### init train recall&rank model
 ```shell
