@@ -1,23 +1,23 @@
-setup:
-  addons:
-    - plan: heroku-postgresql
-      as: DATABASE
-  config:
-    xxx: xxx
+#setup:
+#  addons:
+#    - plan: heroku-postgresql
+#      as: DATABASE
+#  config:
+#    xxx: xxx
 build:
   docker:
-    server: Dockerfile
-  config:
-    xxx: xxx
+    web: Dockerfile
+#  config:
+#    xxx: xxx
 #release:
 #  command:
 #    - ./pre-run-tasks.sh
 #  image: server
-run:
-  recommender:
-    command:
-      - python recommender.py
-    image: server
+#run:
+#  recommender:
+#    command:
+#      - python recommender.py
+#    image: server
 #  model_trainer:
 #    command:
 #      - python model_trainer.py

@@ -13,11 +13,12 @@ import config
 
 
 def write_strlist_to_file(str_list, file_path):
-    if len(str_list) == 0:
-        return
+    if len(str_list) < 100:
+        return -1
     with open(file_path, "w") as fw:
         for s in str_list:
             fw.write(s + "\n")
+    return 0
 
 
 def train_model():
@@ -30,13 +31,17 @@ def train_model():
     start_t1 = (datetime.datetime.now() -
                 datetime.timedelta(days=config.model_train_log_days)).strftime("%Y-%m-%d %H:%M:%S")
     behavior_data = loldb.get_user_features_behavior_log(start_t1)
-    write_strlist_to_file(behavior_data, behavior_log_file)
+    ret = write_strlist_to_file(behavior_data, behavior_log_file)
+    if ret == -1:
+        return
 
     forward_file = recall_contract.forward_local_dir
     start_t2 = (datetime.datetime.now() -
                 datetime.timedelta(days=config.item_index_days)).strftime("%Y-%m-%d %H:%M:%S")
     forward_data = loldb.get_all_item_forward(start_t2)
-    write_strlist_to_file(forward_data, forward_file)
+    ret = write_strlist_to_file(forward_data, forward_file)
+    if ret == -1:
+        return
     write_success(os.path.dirname(behavior_log_file))
 
     recall_contract.train()
