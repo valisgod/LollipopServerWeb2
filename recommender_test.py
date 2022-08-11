@@ -20,7 +20,7 @@ def main():
             }
             response = requests.post(url, json=payload).json()
             print(response)
-            # break
+            break
 
     payload = {
         "method": "AskRecommend",

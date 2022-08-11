@@ -5,7 +5,7 @@ import json
 
 
 def main():
-    url = "http://localhost:4001/jsonrpc"
+    url = "http://localhost:4000/jsonrpc"
 
     with open("./AlgContract/data/test/items.json", "r", encoding="utf-8") as f:
         for line in f:
@@ -23,7 +23,7 @@ def main():
 
             assert response["jsonrpc"]
             assert response["id"] == 0
-            # break
+            break
 
 
 if __name__ == "__main__":
