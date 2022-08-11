@@ -7,7 +7,6 @@ import json
 from sqlalchemy.orm import sessionmaker
 import warnings
 import pandas as pd
-from log import logger
 
 warnings.filterwarnings('ignore')
 
@@ -22,7 +21,6 @@ def read_sql(self, ssql, nidxcol=0, **kwargs):
 
 
 def dump_df(df, filename):
-    logger.info('dumping data into {} ...'.format(filename))
     pickle.dump(df, open(filename, 'wb'))
     return
 
