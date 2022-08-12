@@ -7,6 +7,7 @@ import json
 from sqlalchemy.orm import sessionmaker
 import warnings
 import pandas as pd
+import random
 
 warnings.filterwarnings('ignore')
 
@@ -114,8 +115,14 @@ class LollipopDB(MDB):
     def get_user_fearures(self, uid):
         command = 'SELECT user_features from t_user_features where uid={}'.format(
             uid)
-        user_features = self.db.read_sql(command)['user_features'].values[0]
-        return user_features
+        user_features = self.db.read_sql(command)['user_features'].values
+        if len(user_features) != 0:
+            return user_features[0]
+        command1 = 'SELECT user_features from t_user_features limit 10'
+        user_features_10 = self.db.read_sql(command1)['user_features'].values
+        if len(user_features_10) == 0:
+            raise Exception('No existing user in db')
+        return random.choice(user_features_10)
 
     def write_recommmend_log(self, uid, recomm_result):
         session = self.Session()

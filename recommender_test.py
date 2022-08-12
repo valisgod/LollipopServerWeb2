@@ -5,7 +5,7 @@ import json
 
 
 def main():
-    url = "http://localhost:4000/jsonrpc"
+    url = "https://recommend-server-web2.herokuapp.com/jsonrpc"
 
     with open("./AlgContract/data/test/user_local_log.json", "r", encoding="utf-8") as f:
         for line in f:
@@ -24,8 +24,8 @@ def main():
 
     payload = {
         "method": "AskRecommend",
-        "params": {"uid": "0031",
-                   "item_nums": 10
+        "params": {"uid": "0030",
+                   "item_nums": 4
                    },
         "jsonrpc": "2.0",
         "id": 0,

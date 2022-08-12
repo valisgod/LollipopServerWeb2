@@ -5,7 +5,7 @@ import json
 
 
 def main():
-    url = "http://localhost:4000/jsonrpc"
+    url = "https://recommend-server-web2.herokuapp.com/jsonrpc"
 
     with open("./AlgContract/data/test/items.json", "r", encoding="utf-8") as f:
         for line in f:
