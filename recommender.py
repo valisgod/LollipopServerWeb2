@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 # -*-coding:utf-8 -*-
 import datetime
-import os
+import sys
 import config
 from werkzeug.wrappers import Request, Response
 from werkzeug.serving import run_simple
@@ -86,4 +86,4 @@ def application(request):
 
 if __name__ == '__main__':
     # TODO new feature: 启动一个异步任务, 后台持续增量构建item索引 & 增量写入正排, 提升item召回时效性
-    run_simple('0.0.0.0', int(os.argv[1]), application)
+    run_simple('0.0.0.0', int(sys.argv[1]), application)
