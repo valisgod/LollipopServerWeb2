@@ -24,14 +24,14 @@ def main():
 
     payload = {
         "method": "AskRecommend",
-        "params": {"uid": "0030",
+        "params": {"uid": "000",
                    "item_nums": 4
                    },
         "jsonrpc": "2.0",
         "id": 0,
     }
     response = requests.post(url, json=payload).json()
-    print(response)
+    print(json.dumps(response, ensure_ascii=False, indent=4))
 
 
 if __name__ == "__main__":

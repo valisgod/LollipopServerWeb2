@@ -60,7 +60,7 @@ class LollipopDB(MDB):
         return
 
     def get_item_forward(self, item_id):
-        command = 'SELECT forward_info from t_item_forward where item_id={}'.format(
+        command = "SELECT forward_info from t_item_forward where item_id='{}'".format(
             item_id)
         forward_info = json.loads(self.db.read_sql(command)[
                                   'forward_info'].values[0])
@@ -113,7 +113,7 @@ class LollipopDB(MDB):
         return
 
     def get_user_fearures(self, uid):
-        command = 'SELECT user_features from t_user_features where uid={}'.format(
+        command = "SELECT user_features from t_user_features where uid='{}'".format(
             uid)
         user_features = self.db.read_sql(command)['user_features'].values
         if len(user_features) != 0:
@@ -126,10 +126,25 @@ class LollipopDB(MDB):
 
     def write_recommmend_log(self, uid, recomm_result):
         session = self.Session()
+        recomm_id_list = []
+        for item in recomm_result:
+            recomm_id_list.append(str(item["id"]))
         command = "REPLACE INTO t_recommend_log(uid,result,created_at) " \
                   "VALUES (:uid,:recomm_result,now())"
         session.execute(command, {"uid": uid,
-                                  "recomm_result": recomm_result})
+                                  "recomm_result": json.dumps(recomm_id_list, ensure_ascii=False)})
+
+        for item in recomm_result:
+            command1 = "REPLACE INTO t_user_rec_items(uid,item_id,created_at) " \
+                      "VALUES (:uid,:item_id,now())"
+            session.execute(command1, {"uid": uid,
+                                       "item_id": str(item['id'])})
         session.commit()
         session.close()
         return
+
+    def get_user_rec_items(self, uid):
+        command = "SELECT item_id from t_user_rec_items where uid='{}'".format(
+            uid)
+        item_ids = self.db.read_sql(command)['item_id'].values
+        return set(item_ids)

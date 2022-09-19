@@ -33,14 +33,15 @@ def ask_recommend(**kwargs):
     uid = str(kwargs["uid"])
     item_nums = kwargs["item_nums"]
     # 通过uid从db中获取计算好的user_features
-    user_features = loldb.get_user_fearures(uid)
-    # TODO 处理冷启动的情况
-    # 执行召回合约
-    recall_items = recall_contract.recall(user_features, item_nums * 10)
+    user_features = json.loads(loldb.get_user_fearures(uid))
+    # 查询已经推荐过的item列表
+    his_rec_items = loldb.get_user_rec_items(uid)
+    # 执行召回合约, 过滤his_rec_items
+    recall_items = recall_contract.recall(user_features, item_nums * 10, his_rec_items)
     # 执行排序合约
     recomm_result = rank_contract.rank(recall_items, user_features, item_nums)
     # 存储推荐结果
-    loldb.write_recommmend_log(uid, json.dumps(recomm_result))
+    loldb.write_recommmend_log(uid, recomm_result)
     return recomm_result
 
 
@@ -58,7 +59,7 @@ def report_user_behavior(**kwargs):
     # 执行用户特征计算合约
     user_fearures = user_contract.update_user_interest(merged_log)
     # 记录用户特征到db
-    loldb.write_user_features(uid, json.dumps(user_fearures))
+    loldb.write_user_features(uid, json.dumps(user_fearures, ensure_ascii=False))
     return "OK"
 
 
@@ -68,11 +69,13 @@ def ask_recommend(**kwargs):
     # id统一用string类型
     item_id = str(raw_content['id'])
     # 存储原始item内容
-    loldb.write_item_raw_content(item_id, json.dumps(raw_content))
+    loldb.write_item_raw_content(item_id, json.dumps(raw_content, ensure_ascii=False))
     # 执行内容理解合约
-    forward_info = cu_contract.parse([raw_content])[0]
+    forward_info = cu_contract.parse([raw_content])
+    if len(forward_info) == 0:
+        raise Exception("content understanding failed.")
     # 存储item正排信息
-    loldb.write_item_forward(item_id, json.dumps(forward_info))
+    loldb.write_item_forward(item_id, json.dumps(forward_info[0], ensure_ascii=False))
     return "OK"
 
 
